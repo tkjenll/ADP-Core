@@ -14,7 +14,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +38,7 @@ public class Menu implements IMenu {
 		this(menuManager, title, 0, inventoryType, updateOnClick);
 	}
 	
-	protected Menu(@NonNull MenuManager menuManager, @NonNull String title, int rows, @Nullable InventoryType inventoryType, boolean updateOnClick) {
+	protected Menu(@NonNull MenuManager menuManager, @NonNull String title, int rows, InventoryType inventoryType, boolean updateOnClick) {
 		if (inventoryType == null && !(rows >= 1 && rows <= 6)) {
 			throw new IllegalArgumentException("Rows must be between 1 and 6, it was " + rows);
 		}

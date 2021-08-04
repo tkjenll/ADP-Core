@@ -3,7 +3,7 @@
   <parent>
     <artifactId>core</artifactId>
     <groupId>com.alessiodp.core</groupId>
-    <version>1.6.4</version>
+    <version>1.6.5</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>core-bukkit</artifactId>
@@ -14,8 +14,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven.compiler.version}</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
       <plugin>
@@ -70,7 +70,7 @@
     <dependency>
       <groupId>com.alessiodp.core</groupId>
       <artifactId>core-common</artifactId>
-      <version>1.6.4</version>
+      <version>1.6.5</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

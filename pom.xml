@@ -6,7 +6,7 @@
 	
 	<groupId>com.alessiodp.core</groupId>
 	<artifactId>core</artifactId>
-	<version>1.6.4</version>
+	<version>1.6.5</version>
 	<packaging>pom</packaging>
 	
 	<name>ADP Core</name>
@@ -56,8 +56,10 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		
 		<maven.compiler.version>3.8.1</maven.compiler.version>
-		<maven.javadoc-plugin.version>3.2.0</maven.javadoc-plugin.version>
+		<maven.deploy.version>2.8.2</maven.deploy.version>
+		<maven.javadoc-plugin.version>3.3.0</maven.javadoc-plugin.version>
 		<maven.shade.version>3.2.4</maven.shade.version>
+		<maven.versions.version>2.8.1</maven.versions.version>
 		
 		<!-- Dev libraries -->
 		<dev.powermock>2.0.9</dev.powermock>
@@ -65,20 +67,20 @@
 		
 		<!-- Shaded libraries -->
 		<libs.bstats>2.2.1</libs.bstats>
-		<libs.slimjar>1.2.3</libs.slimjar>
+		<libs.slimjar>1.2.5-SNAPSHOT</libs.slimjar>
 		<libs.paperlib>1.0.6</libs.paperlib>
 		<libs.simpleyaml>1.7.2</libs.simpleyaml>
 		
 		<!-- External libraries -->
 		<libs.h2>1.4.200</libs.h2>
 		<libs.hikaricp>4.0.3</libs.hikaricp>
-		<libs.jdbi>3.20.1</libs.jdbi>
+		<libs.jdbi>3.21.0</libs.jdbi>
 		<libs.mariadb>2.7.2</libs.mariadb>
-		<libs.mysql>8.0.25</libs.mysql>
+		<libs.mysql>8.0.26</libs.mysql>
 		<libs.nashorn>15.2</libs.nashorn>
-		<libs.postgresql>42.2.22</libs.postgresql>
+		<libs.postgresql>42.2.23</libs.postgresql>
 		<libs.slf4j>1.7.30</libs.slf4j>
-		<libs.sqlite>3.34.0</libs.sqlite>
+		<libs.sqlite>3.36.0.1</libs.sqlite>
 		
 		<!-- Sub external libraries -->
 		<libs.asm>7.3.1</libs.asm>
@@ -101,12 +103,12 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.8.1</version>
+				<version>${maven.versions.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>${maven.javadoc-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -118,7 +120,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.2</version>
+				<version>${maven.deploy.version}</version>
 				<executions>
 					<execution>
 						<id>default-deploy</id>
@@ -171,7 +173,7 @@
 		<repository>
 			<!-- vshnv repo -->
 			<id>vshnv-repo</id>
-			<url>https://repo.vshnv.tech/releases</url>
+			<url>https://repo.vshnv.tech/snapshots</url>
 		</repository>
 	</repositories>
 	

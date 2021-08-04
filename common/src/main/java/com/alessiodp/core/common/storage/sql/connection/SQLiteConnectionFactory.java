@@ -5,7 +5,6 @@ import com.alessiodp.core.common.storage.StorageType;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 
@@ -21,12 +20,12 @@ public class SQLiteConnectionFactory implements ConnectionFactory {
 	@Getter private Jdbi jdbi;
 	@Getter private boolean failed;
 	
-	public SQLiteConnectionFactory(@Nullable ADPPlugin plugin, @NonNull String databaseUrl) {
+	public SQLiteConnectionFactory(ADPPlugin plugin, @NonNull String databaseUrl) {
 		this.plugin = plugin;
 		this.databaseUrl = databaseUrl;
 	}
 	
-	public SQLiteConnectionFactory(@Nullable ADPPlugin plugin, @NonNull Path databasePath) {
+	public SQLiteConnectionFactory(ADPPlugin plugin, @NonNull Path databasePath) {
 		this.plugin = plugin;
 		this.databaseUrl = "jdbc:sqlite:" + databasePath.toString();
 	}

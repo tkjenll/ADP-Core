@@ -7,7 +7,7 @@
 	<parent>
 		<artifactId>core</artifactId>
 		<groupId>com.alessiodp.core</groupId>
-		<version>1.6.4</version>
+		<version>1.6.5</version>
 	</parent>
 	
 	<artifactId>core-bungeecord</artifactId>
@@ -19,8 +19,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven.compiler.version}</version>
 				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
 				</configuration>
 			</plugin>
 			<plugin>

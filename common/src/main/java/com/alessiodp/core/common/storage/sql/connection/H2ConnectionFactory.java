@@ -5,7 +5,6 @@ import com.alessiodp.core.common.storage.StorageType;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 
@@ -21,12 +20,12 @@ public class H2ConnectionFactory implements ConnectionFactory {
 	@Getter private Jdbi jdbi;
 	@Getter private boolean failed;
 	
-	public H2ConnectionFactory(@Nullable ADPPlugin plugin, @NonNull String databaseUrl) {
+	public H2ConnectionFactory(ADPPlugin plugin, @NonNull String databaseUrl) {
 		this.plugin = plugin;
 		this.databaseUrl = databaseUrl;
 	}
 	
-	public H2ConnectionFactory(@Nullable ADPPlugin plugin, @NonNull Path databasePath) {
+	public H2ConnectionFactory(ADPPlugin plugin, @NonNull Path databasePath) {
 		this.plugin = plugin;
 		this.databaseUrl = "jdbc:h2:" + databasePath.toString() + ";IGNORECASE=TRUE";
 	}

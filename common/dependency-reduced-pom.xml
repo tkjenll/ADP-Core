@@ -3,7 +3,7 @@
   <parent>
     <artifactId>core</artifactId>
     <groupId>com.alessiodp.core</groupId>
-    <version>1.6.4</version>
+    <version>1.6.5</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>core-common</artifactId>
@@ -20,8 +20,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven.compiler.version}</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
       <plugin>
@@ -102,7 +102,7 @@
     <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
-      <version>3.34.0</version>
+      <version>3.36.0.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -114,19 +114,19 @@
     <dependency>
       <groupId>org.jdbi</groupId>
       <artifactId>jdbi3-core</artifactId>
-      <version>3.20.1</version>
+      <version>3.21.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.jdbi</groupId>
       <artifactId>jdbi3-stringtemplate4</artifactId>
-      <version>3.20.1</version>
+      <version>3.21.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.jdbi</groupId>
       <artifactId>jdbi3-sqlobject</artifactId>
-      <version>3.20.1</version>
+      <version>3.21.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -138,7 +138,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.25</version>
+      <version>8.0.26</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -150,8 +150,14 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.22</version>
+      <version>42.2.23</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>checker-qual</artifactId>
+          <groupId>org.checkerframework</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.yaml</groupId>

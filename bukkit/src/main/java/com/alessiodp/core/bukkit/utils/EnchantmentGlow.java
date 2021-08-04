@@ -6,7 +6,6 @@ import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.Field;
 
@@ -19,17 +18,17 @@ public class EnchantmentGlow extends EnchantmentWrapper {
 	}
 	
 	@Override
-	public boolean canEnchantItem(@NonNull ItemStack item) {
+	public boolean canEnchantItem(ItemStack item) {
 		return true;
 	}
 	
 	@Override
-	public boolean conflictsWith(@NonNull Enchantment other) {
+	public boolean conflictsWith(Enchantment other) {
 		return false;
 	}
 	
 	@SuppressWarnings("deprecation")
-	@Override @NonNull
+	@Override
 	public EnchantmentTarget getItemTarget() {
 		return EnchantmentTarget.ALL;
 	}
@@ -39,7 +38,7 @@ public class EnchantmentGlow extends EnchantmentWrapper {
 		return 1;
 	}
 	
-	@Override @NonNull
+	@Override
 	public String getName() {
 		return "Glow";
 	}
