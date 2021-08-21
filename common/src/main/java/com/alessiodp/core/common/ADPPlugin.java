@@ -1,11 +1,12 @@
 package com.alessiodp.core.common;
 
 import com.alessiodp.core.common.addons.AddonManager;
-import com.alessiodp.core.common.addons.ExternalLibraries;
 import com.alessiodp.core.common.addons.internal.JsonHandler;
 import com.alessiodp.core.common.addons.internal.TitleHandler;
 import com.alessiodp.core.common.bootstrap.ADPBootstrap;
 import com.alessiodp.core.common.bootstrap.AbstractADPPlugin;
+import com.alessiodp.core.common.libraries.LibraryManager;
+import com.alessiodp.core.common.libraries.LibraryUsage;
 import com.alessiodp.core.common.logging.LoggerManager;
 import com.alessiodp.core.common.addons.internal.ADPUpdater;
 import com.alessiodp.core.common.commands.CommandManager;
@@ -16,8 +17,6 @@ import com.alessiodp.core.common.players.LoginAlertsManager;
 import com.alessiodp.core.common.scheduling.ADPScheduler;
 import com.alessiodp.core.common.storage.DatabaseManager;
 import com.alessiodp.core.common.utils.IPlayerUtils;
-import io.github.slimjar.app.builder.ApplicationBuilder;
-import io.github.slimjar.resolver.data.DependencyData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,16 +53,9 @@ public abstract class ADPPlugin extends AbstractADPPlugin {
 	public void loading() {
 		instance = this;
 		isPluginDisabled = false;
-		logConsole(String.format(Constants.DEBUG_PLUGIN_LOADING, this.getPluginName(), this.getVersion()));
-		try {
-			DependencyData dependencyData = ExternalLibraries.getDependencyData(this);
-			ApplicationBuilder
-					.appending(getPluginName())
-					.downloadDirectoryPath(this.getFolder().resolve("libraries"))
-					.dataProviderFactory((url) -> () -> dependencyData)
-					.build();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		
+		LibraryManager libraryManager = new LibraryManager(this);
+		if (!libraryManager.init()) {
 			logConsole(Constants.DEBUG_PLUGIN_LOADING_FAILED, LogLevel.ERROR);
 			isPluginDisabled = true;
 		}
@@ -203,5 +195,5 @@ public abstract class ADPPlugin extends AbstractADPPlugin {
 	 *
 	 * @return Returns a list of usages
 	 */
-	public abstract List<ExternalLibraries.Usage> getLibrariesUsages();
+	public abstract List<LibraryUsage> getLibrariesUsages();
 }

@@ -1,13 +1,18 @@
-package com.alessiodp.core.common.addons;
+package com.alessiodp.core.common.libraries;
 
 import com.alessiodp.core.common.ADPPlugin;
+import com.alessiodp.core.common.configuration.Constants;
+import io.github.slimjar.app.builder.ApplicationBuilder;
 import io.github.slimjar.relocation.RelocationRule;
 import io.github.slimjar.resolver.data.Dependency;
 import io.github.slimjar.resolver.data.DependencyData;
 import io.github.slimjar.resolver.data.Repository;
 import io.github.slimjar.resolver.mirrors.SimpleMirrorSelector;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,24 +20,55 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-public class ExternalLibraries {
+@RequiredArgsConstructor
+public class LibraryManager {
+	@NonNull protected final ADPPlugin plugin;
 	
-	public static DependencyData getDependencyData(ADPPlugin plugin) throws IOException {
+	public boolean init() {
+		try {
+			if (plugin.getLibrariesUsages().size() > 0) {
+				plugin.logConsole(String.format(Constants.DEBUG_PLUGIN_LOADING, plugin.getPluginName(), plugin.getVersion()));
+				
+				DependencyData dependencyData = getDependencyData();
+				
+				ApplicationBuilder
+						.appending(plugin.getPluginName())
+						.downloadDirectoryPath(plugin.getFolder().resolve("libraries"))
+						.dataProviderFactory((url) -> () -> dependencyData)
+						.internalRepositories(getRepositories())
+						.logger(new LibraryLogger(plugin))
+						.build();
+			}
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return false;
+	}
+	
+	private List<Repository> getRepositories() throws MalformedURLException {
+		return Arrays.asList(
+				new Repository(new URL("https://repo.alessiodp.com/releases/")),
+				new Repository(new URL("https://repo1.maven.org/maven2/"))
+		);
+	}
+	
+	public DependencyData getDependencyData() throws IOException {
 		Properties versions = new Properties();
 		versions.load(plugin.getResource("libraries.properties"));
 		
-		List<Usage> usages = plugin.getLibrariesUsages();
+		List<LibraryUsage> usages = plugin.getLibrariesUsages();
 		ArrayList<Dependency> dependencies = new ArrayList<>();
 		ArrayList<RelocationRule> relocations = new ArrayList<>();
 		
-		if (usages.contains(Usage.H2)) {
+		if (usages.contains(LibraryUsage.H2)) {
 			dependencies.add(new Dependency(
 					filter("com{}h2database"), "h2", versions.getProperty("h2"), null, Collections.emptyList()
 			));
 			relocations.add(new RelocationRule(filter("org{}h2"), plugin.getPackageName() + ".libs.h2"));
 		}
 		
-		if (usages.contains(Usage.MYSQL) || usages.contains(Usage.MARIADB) || usages.contains(Usage.POSTGRESQL)) {
+		if (usages.contains(LibraryUsage.MYSQL) || usages.contains(LibraryUsage.MARIADB) || usages.contains(LibraryUsage.POSTGRESQL)) {
 			dependencies.add(new Dependency(
 					filter("com{}zaxxer"), "HikariCP", versions.getProperty("hikaricp"), null, Collections.emptyList()
 			));
@@ -76,28 +112,28 @@ public class ExternalLibraries {
 			relocations.add(new RelocationRule(filter("io{}leangen{}geantyref"), plugin.getPackageName() + ".libs.geantyref"));
 		}
 		
-		if (usages.contains(Usage.MARIADB)) {
+		if (usages.contains(LibraryUsage.MARIADB)) {
 			dependencies.add(new Dependency(
 					filter("org{}mariadb{}jdbc"), "mariadb-java-client", versions.getProperty("mariadb"), null, Collections.emptyList()
 			));
 			relocations.add(new RelocationRule(filter("org{}mariadb"), plugin.getPackageName() + ".libs.mariadb"));
 		}
 		
-		if (usages.contains(Usage.MYSQL)) {
+		if (usages.contains(LibraryUsage.MYSQL)) {
 			dependencies.add(new Dependency(
 					filter("mysql"), "mysql-connector-java", versions.getProperty("mysql"), null, Collections.emptyList()
 			));
 			relocations.add(new RelocationRule(filter("com{}mysql"), plugin.getPackageName() + ".libs.mysql"));
 		}
 		
-		if (usages.contains(Usage.POSTGRESQL)) {
+		if (usages.contains(LibraryUsage.POSTGRESQL)) {
 			dependencies.add(new Dependency(
 					filter("org{}postgresql"), "postgresql", versions.getProperty("postgresql"), null, Collections.emptyList()
 			));
 			relocations.add(new RelocationRule(filter("org{}postgresql"), plugin.getPackageName() + ".libs.postgresql"));
 		}
 		
-		if (usages.contains(Usage.SQLITE)) {
+		if (usages.contains(LibraryUsage.SQLITE)) {
 			// Load SQLite if somehow its not in the server
 			try {
 				Class.forName("org.sqlite.SQLiteDataSource");
@@ -109,7 +145,7 @@ public class ExternalLibraries {
 			}
 		}
 		
-		if (usages.contains(Usage.SCRIPT) && plugin.getJavaVersion() >= 15) {
+		if (usages.contains(LibraryUsage.SCRIPT) && plugin.getJavaVersion() >= 15) {
 			// Load new Nashorn if Java 15+
 			dependencies.add(new Dependency(
 					filter("org{}openjdk{}nashorn"), "nashorn-core", versions.getProperty("nashorn"), null, Collections.emptyList()
@@ -117,8 +153,12 @@ public class ExternalLibraries {
 			dependencies.add(new Dependency(
 					filter("org{}ow2{}asm"), "asm", versions.getProperty("asm"), null, Collections.emptyList()
 			));
+			dependencies.add(new Dependency(
+					filter("org{}ow2{}asm"), "asm-util", versions.getProperty("asm"), null, Collections.emptyList()
+			));
 			relocations.add(new RelocationRule(filter("org{}openjdk{}nashorn"), plugin.getPackageName() + ".libs.nashorn"));
 			relocations.add(new RelocationRule(filter("org{}objectweb{}asm"), plugin.getPackageName() + ".libs.asm"));
+			relocations.add(new RelocationRule(filter("org{}ow2{}asm"), plugin.getPackageName() + ".libs.asm"));
 		}
 		
 		return new DependencyData(
@@ -131,9 +171,5 @@ public class ExternalLibraries {
 	
 	private static String filter(String str) {
 		return str.replace("{}", ".");
-	}
-	
-	public enum Usage {
-		H2, SQLITE, MYSQL, MARIADB, POSTGRESQL, SCRIPT
 	}
 }

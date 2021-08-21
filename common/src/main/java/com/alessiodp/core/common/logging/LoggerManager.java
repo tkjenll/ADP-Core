@@ -81,6 +81,15 @@ public class LoggerManager {
 	 * Send a log message
 	 *
 	 * @param message the message to save
+	 */
+	public void log(String message) {
+		log(message, true);
+	}
+	
+	/**
+	 * Send a log message
+	 *
+	 * @param message the message to save
 	 * @param printConsole print the message on console
 	 */
 	public void log(String message, boolean printConsole) {
