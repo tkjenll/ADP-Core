@@ -96,9 +96,13 @@ public abstract class CommandUtils {
 	 */
 	public List<String> tabCompleteParser(List<String> commands, String word) {
 		List<String> ret = new ArrayList<>();
-		for (String s : commands) {
-			if (CommonUtils.toLowerCase(s).startsWith(CommonUtils.toLowerCase(word))) {
-				ret.add(s);
+		if (word.isEmpty())
+			ret.addAll(commands);
+		else {
+			for (String s : commands) {
+				if (CommonUtils.toLowerCase(s).startsWith(CommonUtils.toLowerCase(word))) {
+					ret.add(s);
+				}
 			}
 		}
 		return ret;
