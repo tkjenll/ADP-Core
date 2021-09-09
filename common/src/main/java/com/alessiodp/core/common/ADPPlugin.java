@@ -128,15 +128,26 @@ public abstract class ADPPlugin extends AbstractADPPlugin {
 		return true;
 	}
 	
-	public final int getJavaVersion() {
-		String version = System.getProperty("java.version");
+	public static int getJavaVersion() {
+		return getJavaVersion(System.getProperty("java.version"));
+	}
+	
+	public static int getJavaVersion(String fullVersion) {
+		String version = fullVersion;
 		if(version.startsWith("1.")) {
 			version = version.substring(2, 3);
 		} else {
 			int dot = version.indexOf(".");
-			if(dot != -1) { version = version.substring(0, dot); }
+			if (dot != -1) { version = version.substring(0, dot); }
+			int dash = version.indexOf("-");
+			if (dash != -1) { version = version.substring(0, dash); }
 		}
-		return Integer.parseInt(version);
+		try {
+			return Integer.parseInt(version);
+		} catch (NumberFormatException ex) {
+			ex.printStackTrace();
+		}
+		return 0;
 	}
 	
 	/**
